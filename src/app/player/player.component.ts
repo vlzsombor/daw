@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { InstrumentService } from '../instrument.service'
 import Wad from 'web-audio-daw';
 import { MidiButton } from '../Model/MidiButton';
+import { interval } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { MidSideCompressor, Transport } from 'tone';
 
 @Component({
   selector: 'app-player',
@@ -9,37 +12,72 @@ import { MidiButton } from '../Model/MidiButton';
   styleUrls: ['./player.component.css']
 })
 export class PlayerComponent {
+
+  private iteration: number = 0;
+  public static LENGTH = 16;
+
+  private scale = [
+    "E6",
+    "D6",
+    "B5",
+    "A5",
+    "G5",
+    "E5",
+    "D5",
+    "B4",
+    "A4",
+    "G4",
+    "E4",
+    "D4",
+    "B3",
+    "A3",
+    "G3",
+    "E3"
+  ];
+
+
   constructor(private instrument: InstrumentService) {
 
-    for (var i: number = 0; i < 10; i++) {
-      this.groups[i] = [];
-      for (var j: number = 0; j < 10; j++) {
-        this.groups[i][j] = {
-          row: j,
-          column: i
+    for (var i: number = 0; i < PlayerComponent.LENGTH; i++) {
+      this.midiButtons[i] = [];
+      for (var j: number = 0; j < PlayerComponent.LENGTH; j++) {
+        this.midiButtons[i][j] = {
+          row: i,
+          column: j
         };
       }
     }
 
   }
-  async handleButtonClick() {
+
+  ngOnInit() {
+    setInterval(() => { this.tick() }, 0.15 * 1000);
+  }
+  tick() {
+
+    console.log('hello')
+
+    this.midiButtons.map(d => d[this.iteration % PlayerComponent.LENGTH]).forEach(column => {
+      let saw = new Wad({ source: 'triangle', env: { decay: 0.25, sustain: 0, release: 0.5 } });
+
+      if (column.enabled) {
+        saw.play({ pitch: this.scale[column.row], label: 'A4' });
+      }
+
+    });
+    this.iteration++;
+  }
+  handleButtonClick() {
     // This function will be called when the button is clicked
     console.log('Button clicked!');
     // Add your desired logic here
 
-    let saw = new Wad({ source: 'triangle', env: { decay: 0.25, sustain: 0, release: 0.5 } });
+    let saw = new Wad({ source: 'sine', env: { decay: 0.25, sustain: 0, release: 0.5 } });
     saw.play({ pitch: '440', label: 'A4' });
 
-    // this.instrument.play(['A2'], {
-    //   source: 'sine', // sine, square, triangle, sawtooth
-    //   volume: 0.25
-    // })
   }
-  protected groups: MidiButton[][] = [];
 
+  protected midiButtons: MidiButton[][] = [];
 
-  protected changeEnabled(i: number, j: number){
-      this.groups[i][j].enabled = !this.groups[i][j].enabled;
-  }
 
 }

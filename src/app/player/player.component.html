@@ -2,7 +2,7 @@
 <input value="hello" (click)="handleButtonClick()" type="button" />
 
 <table>
-    <tr *ngFor="let group of groups">
+    <tr *ngFor="let group of midiButtons">
         <!-- <tr><td><h2>{{group}}</h2></td></tr> -->
         <td *ngFor="let item of group">
             <button (click)="item.enabled = !item.enabled" class="btn {{item.enabled ? 'btn-primary' : 'btn-danger'}}"
