@@ -5,6 +5,7 @@ import { MidiButton } from '../Model/MidiButton';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { MidSideCompressor, Transport } from 'tone';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
   selector: 'app-player',
