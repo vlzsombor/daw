@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
 import { InstrumentService } from '../instrument.service'
 import Wad from 'web-audio-daw';
 import { MidiButton } from '../Model/MidiButton';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { MidSideCompressor, Transport } from 'tone';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Inject, ViewChild, } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Pianoroll } from 'webaudio-pianoroll'
 
 @Component({
   selector: 'app-player',
@@ -16,6 +17,7 @@ export class PlayerComponent {
 
   private iteration: number = 0;
   public static LENGTH = 16;
+  @ViewChild('myname') input; 
 
   private scale = [
     "E6",
@@ -37,7 +39,7 @@ export class PlayerComponent {
   ];
 
 
-  constructor(private instrument: InstrumentService) {
+  constructor(private instrument: InstrumentService, @Inject(DOCUMENT) private document: Document) {
 
     for (var i: number = 0; i < PlayerComponent.LENGTH; i++) {
       this.midiButtons[i] = [];
@@ -52,7 +54,7 @@ export class PlayerComponent {
   }
 
   ngOnInit() {
-    setInterval(() => { this.tick() }, 0.15 * 1000);
+    // setInterval(() => { this.tick() }, 0.15 * 1000);
   }
   tick() {
 
@@ -68,17 +70,44 @@ export class PlayerComponent {
     });
     this.iteration++;
   }
+
+
   handleButtonClick() {
     // This function will be called when the button is clicked
     console.log('Button clicked!');
     // Add your desired logic here
-
     let saw = new Wad({ source: 'sine', env: { decay: 0.25, sustain: 0, release: 0.5 } });
+
     saw.play({ pitch: '440', label: 'A4' });
 
   }
 
   protected midiButtons: MidiButton[][] = [];
+
+
+/*
+
+play() function passes necessary data for playing to callback function like : callback({t:noteOnTime, g:noteOffTime, n:noteNumber})
+*/
+  timebase = 480;
+
+  Callback(ev: { t: number, g: number, n: number }) {
+
+    console.log('Button clicked!');
+    // Add your desired logic here
+    let saw = new Wad({ source: 'sine', env: { decay: 0.25, sustain: 0, release: 0.5 } });
+
+    saw.play({ pitch: '880', label: 'A4' });
+
+
+  }
+  Play() {
+    console.log('hellofasdasfsxd');
+    // let audioPlayer = this.document.getElementById("proll") as Pianoroll
+    
+    this.input.nativeElement.play(Wad.audioContext, this.Callback);
+  }
+
 
 
 }
