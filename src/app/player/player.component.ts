@@ -17,6 +17,9 @@ export class PlayerComponent {
 
   public static LENGTH = 16;
   @ViewChild('myname') input;
+  waveForm: waveForm[] = ['sine', 'square', 'sawtooth', 'triangle', 'noise'];
+
+  selectedWaveForm = this.waveForm[0];
 
   private scale = [
     "E3",
@@ -42,13 +45,6 @@ export class PlayerComponent {
   }
 
 
-  handleButtonClick() {
-    console.log('Button clicked!');
-    let saw = new Wad({ source: 'sine', env: { decay: 0.25, sustain: 0, release: 0.5 } });
-    saw.play({ pitch: '440', label: 'A4' });
-  }
-
-
   timebase = 480;
 
   Callback(ev: { t: number, g: number, n: number }) {
@@ -59,9 +55,9 @@ export class PlayerComponent {
     // 57 -> A4 440hz
     console.log('Button clicked!');
     // Add your desired logic here
-    let saw = new Wad({ source: 'sine', env: { decay: 0.30, sustain: 0, release: 0.5 } });
+    let saw = new Wad({ source: this.selectedWaveForm, env: { decay: 0.25, sustain: 0, release: 0.5 } });
 
-let a = this.scale;
+    let a = this.scale;
     saw.play({ pitch: this.scale[ev.n], label: 'A4' });
   }
   Play() {
@@ -85,4 +81,17 @@ let a = this.scale;
     }
   }
 
+  Layout2(k) {
+
+    var a: number = k.value / 20;
+
+    if (a === 5) {
+      a = 4;
+    }
+
+    this.selectedWaveForm = this.waveForm[Math.floor(a)];
+  }
+
+
 }
+type waveForm = 'sine' | 'square' | 'sawtooth' | 'triangle' | 'noise';
