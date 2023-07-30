@@ -1,0 +1,59 @@
+body{
+}
+#base {
+    background:#88d;
+    position:relative;
+    width:100%;
+    height:500px;
+}
+#proll{
+    position:absolute;
+    left:16px;
+    top:50px;
+}
+#xrange{
+    position:absolute;
+    left:700px;
+    top:400px;
+}
+#xoffset{
+    position:absolute;
+    left:480px;
+    top:400px;
+}
+#yrange{
+    position:absolute;
+    left:850px;
+    top:270px;
+}
+#yoffset{
+    position:absolute;
+    left:850px;
+    top:60px;
+}
+#prollyoff{
+    position:absolute;
+    left:1040px;
+    top:16px;
+}
+#prollyzoom{
+    position:absolute;
+    left:1040px;
+    top:400px;
+}
+.ind{
+    background:#00f;
+    width:64px;
+    height:8px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+}
+.pat{
+    background:#00f;
+    width:64px;
+    height:32px;
+    margin:0;
+    padding:0;
+    display:inline-block;
+}
