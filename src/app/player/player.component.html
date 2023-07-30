@@ -1,32 +1,21 @@
-<p>player works!</p>
-<input value="hello" (click)="handleButtonClick()" type="button" />
-
-<table>
-    <tr *ngFor="let group of midiButtons">
-        <!-- <tr><td><h2>{{group}}</h2></td></tr> -->
-        <td *ngFor="let item of group">
-            <button (click)="item.enabled = !item.enabled" class="btn {{item.enabled ? 'btn-primary' : 'btn-danger'}}"
-                type="button">{{item.row}}
-                {{item.column}}</button>
-        </td>
-    </tr>
-</table>
-<button (onclick)="Play()" type="button" class="btn btn-danger">Danger</button>
-
 <button (click)="Play()">Click Me</button>
 
-<!-- <webaudio-pianoroll #myname grid="1" xruler="0" yruler="0" kbwidth="0" xrange="16" yrange="16" bgsrc="./bg.jpg"
-    collt="rgba(255,255,255,0.7)" coldk="rgba(200,200,200,0.7)" editmode="gridpoly"></webaudio-pianoroll>
- -->
 
 <div id="base">
-    <webaudio-pianoroll #myname id="proll" width="800" height="320" timebase="4" loop="1" xrange="64" yrange="22" markend="960"
-        grid="4" wheelzoom="1" editmode="dragpoly"></webaudio-pianoroll>
+    <webaudio-pianoroll #myname id="proll" width="800" height="320"></webaudio-pianoroll>
 
-    <webaudio-slider onchange="Layout(this)" id="xrange" direction="horizontal" min="1" max="10"
-        value="2"></webaudio-slider>
-    <webaudio-slider onchange="Layout(this)" id="xoffset" direction="horizontal" width="200" min="0" max="20"
+    <webaudio-slider #xrange (input)="Layout(xrange)" id="xrange" direction="horz" width="120" height="24" min="1" max="10"
+        value="1"></webaudio-slider>
+    <webaudio-slider #xoffset (input)="Layout(xoffset)" id="xoffset" direction="horz" width="200" height="24" min="0" max="20"
         step="0.01" value="0"></webaudio-slider>
-    <webaudio-slider onchange="Layout(this)" id="yrange" min="3" max="32" value="16"></webaudio-slider>
-    <webaudio-slider onchange="Layout(this)" id="yoffset" min="30" max="120" height="200" value="60"></webaudio-slider>
+    <webaudio-slider #yrange (input)="Layout(yrange)" id="yrange" direction="vert" width="24" height="120" min="3" max="32"
+        value="16"></webaudio-slider>
+    <webaudio-slider #yoffset (input)="Layout(yoffset)" id="yoffset" direction="vert" width="24" height="200" min="30" max="120"
+        height="200" value="60"></webaudio-slider>
 </div>
+<button
+    onclick="document.getElementById('mml').value=(document.getElementById('proll').getMMLString())">getMMLString</button>
+<button
+    onclick="document.getElementById('proll').setMMLString(document.getElementById('mml').value)">setMMLString</button>
+<button (click)="Play()">Play</button>
+<button onclick="document.getElementById('proll').stop()">Stop</button>

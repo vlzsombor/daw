@@ -6,7 +6,7 @@ import { takeWhile } from 'rxjs/operators';
 import { MidSideCompressor, Transport } from 'tone';
 import { Component, Inject, ViewChild, } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Pianoroll } from 'webaudio-pianoroll'
+import { Pianoroll } from 'webaudio-pianoroll';
 
 @Component({
   selector: 'app-player',
@@ -17,7 +17,7 @@ export class PlayerComponent {
 
   private iteration: number = 0;
   public static LENGTH = 16;
-  @ViewChild('myname') input; 
+  @ViewChild('myname') input;
 
   private scale = [
     "E6",
@@ -85,10 +85,10 @@ export class PlayerComponent {
   protected midiButtons: MidiButton[][] = [];
 
 
-/*
-
-play() function passes necessary data for playing to callback function like : callback({t:noteOnTime, g:noteOffTime, n:noteNumber})
-*/
+  /*
+  
+  play() function passes necessary data for playing to callback function like : callback({t:noteOnTime, g:noteOffTime, n:noteNumber})
+  */
   timebase = 480;
 
   Callback(ev: { t: number, g: number, n: number }) {
@@ -104,10 +104,25 @@ play() function passes necessary data for playing to callback function like : ca
   Play() {
     console.log('hellofasdasfsxd');
     // let audioPlayer = this.document.getElementById("proll") as Pianoroll
-    
+
     this.input.nativeElement.play(Wad.audioContext, this.Callback);
   }
 
-
+  Layout(k) {
+    switch (k.id) {
+      case "xrange":
+        this.input.nativeElement.xrange = k.value * 16;
+        break;
+      case "xoffset":
+        this.input.nativeElement.xoffset = k.value * 16;
+        break;
+      case "yrange":
+        this.input.nativeElement.yrange = k.value;
+        break;
+      case "yoffset":
+        this.input.nativeElement.yoffset = k.value;
+        break;
+    }
+  }
 
 }
