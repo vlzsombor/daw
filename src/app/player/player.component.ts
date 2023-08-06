@@ -1,6 +1,5 @@
 import { Component, Inject, ViewChild, } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { OscillatorService } from './oscillator.service';
 import Wad from 'web-audio-daw';
 
 @Component({
@@ -12,8 +11,7 @@ export class PlayerComponent {
 
   @ViewChild('myname') input;
 
-  constructor(@Inject(DOCUMENT) private document: Document,
-    @Inject(OscillatorService) protected OscillatorService: OscillatorService) {
+  constructor(@Inject(DOCUMENT) private document: Document) {
   }
   waveForm: waveForm[] = ['sine', 'square', 'sawtooth', 'triangle', 'noise'];
   public selectedWaveForm = this.waveForm[0];
