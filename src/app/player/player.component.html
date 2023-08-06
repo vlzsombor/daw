@@ -1,25 +1,24 @@
-<button (click)="Play()">Click Me</button>
+<div class="container">
+    <div class="row">
+        <webaudio-pianoroll grid="1" #myname id="proll" width="800" height="320" editmode="gridpoly" yoffset="0"
+            yrange="16"></webaudio-pianoroll>
+    </div>
+    <div class="row">
+        <div class="col">
+            <webaudio-slider #xrange (input)="Layout(xrange)" id="xrange" direction="horz" width="120" height="24"
+                min="1" max="10" value="1"></webaudio-slider>
+            <webaudio-slider #xoffset (input)="Layout(xoffset)" id="xoffset" direction="horz" width="200" height="24"
+                min="0" max="20" step="0.01" value="0"></webaudio-slider>
+            <button
+                onclick="document.getElementById('mml').value=(document.getElementById('proll').getMMLString())">getMMLString</button>
+            <button
+                onclick="document.getElementById('proll').setMMLString(document.getElementById('mml').value)">setMMLString</button>
 
-
-<div id="base">
-    <webaudio-pianoroll grid="1" #myname id="proll" width="800" height="320" editmode="gridpoly" yoffset="0"
-        yrange="16"></webaudio-pianoroll>
-
-    <webaudio-slider #xrange (input)="Layout(xrange)" id="xrange" direction="horz" width="120" height="24" min="1"
-        max="10" value="1"></webaudio-slider>
-    <webaudio-slider #xoffset (input)="Layout(xoffset)" id="xoffset" direction="horz" width="200" height="24" min="0"
-        max="20" step="0.01" value="0"></webaudio-slider>
-    <!-- <webaudio-slider #yrange (input)="Layout(yrange)" id="yrange" direction="vert" width="24" height="120" min="3" max="32"
-        value="16"></webaudio-slider>
-    <webaudio-slider #yoffset (input)="Layout(yoffset)" id="yoffset" direction="vert" width="24" height="200" min="30" max="120"
-        height="200" value="60"></webaudio-slider> -->
+            {{this.selectedWaveForm}}
+            <webaudio-knob step="20" #webaudioKnobWaveform (input)="SelectWaveform(webaudioKnobWaveform)" id="knob-1"
+                min="0" max="100"></webaudio-knob>
+            <webaudio-knob #webaudioKnobLowPassFrequency (input)="SelectFrequency(webaudioKnobLowPassFrequency)"
+                id="knob-1" min="0" max="10000"></webaudio-knob>
+        </div>
+    </div>
 </div>
-<button
-    onclick="document.getElementById('mml').value=(document.getElementById('proll').getMMLString())">getMMLString</button>
-<button
-    onclick="document.getElementById('proll').setMMLString(document.getElementById('mml').value)">setMMLString</button>
-<button (click)="Play()">Play</button>
-<button onclick="document.getElementById('proll').stop()">Stop</button>
-
-
-<webaudio-knob #webaudioKnobWaveform (input)="Layout2(webaudioKnobWaveform)" id="knob-1" min="0" max="100"></webaudio-knob>

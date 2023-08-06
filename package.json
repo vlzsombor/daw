@@ -19,10 +19,12 @@
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
     "bootstrap": "^5.3.0",
+    "pluck-string-node": "^1.1.0",
     "rxjs": "~7.8.0",
     "tone": "^14.7.77",
     "tslib": "^2.3.0",
     "web-audio-daw": "^4.13.2",
+    "web-audio-oscillators": "^1.0.4",
     "webaudio-pianoroll": "^0.6.0",
     "zone.js": "~0.13.0"
   },

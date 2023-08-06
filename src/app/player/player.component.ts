@@ -1,12 +1,7 @@
-import { InstrumentService } from '../instrument.service'
-import Wad from 'web-audio-daw';
-import { MidiButton } from '../Model/MidiButton';
-import { interval } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
-import { MidSideCompressor, Transport } from 'tone';
 import { Component, Inject, ViewChild, } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Pianoroll } from 'webaudio-pianoroll';
+import { OscillatorService } from './oscillator.service';
+import Wad from 'web-audio-daw';
 
 @Component({
   selector: 'app-player',
@@ -15,53 +10,20 @@ import { Pianoroll } from 'webaudio-pianoroll';
 })
 export class PlayerComponent {
 
-  public static LENGTH = 16;
   @ViewChild('myname') input;
+
+  constructor(@Inject(DOCUMENT) private document: Document,
+    @Inject(OscillatorService) protected OscillatorService: OscillatorService) {
+  }
   waveForm: waveForm[] = ['sine', 'square', 'sawtooth', 'triangle', 'noise'];
+  public selectedWaveForm = this.waveForm[0];
 
-  selectedWaveForm = this.waveForm[0];
-
-  private scale = [
-    "E3",
-    "G3",
-    "A3",
-    "B3",
-    "D4",
-    "E4",
-    "G4",
-    "A4",
-    "B4",
-    "D5",
-    "E5",
-    "G5",
-    "A5",
-    "B5",
-    "D6",
-    "E6",
-  ];
-
-
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  public play() {
+    this.input.nativeElement.play(Wad.audioContext, (this.Callback).bind(this));
   }
 
-
-  timebase = 480;
-
-  Callback(ev: { t: number, g: number, n: number }) {
-
-    // 52 - 88
-    //52 = 0
-    // 88 = 16
-    // 57 -> A4 440hz
-    console.log('Button clicked!');
-    // Add your desired logic here
-    let saw = new Wad({ source: this.selectedWaveForm, env: { decay: 0.25, sustain: 0, release: 0.5 } });
-
-    let a = this.scale;
-    saw.play({ pitch: this.scale[ev.n], label: 'A4' });
-  }
-  Play() {
-    this.input.nativeElement.play(Wad.audioContext, this.Callback.bind(this));
+  public stop() {
+    this.input.nativeElement.stop();
   }
 
   Layout(k) {
@@ -81,17 +43,46 @@ export class PlayerComponent {
     }
   }
 
-  Layout2(k) {
-
-    var a: number = k.value / 20;
-
-    if (a === 5) {
-      a = 4;
+  public SelectWaveform(k) {
+    var waveFormNumber: number = k.value / 20;
+    if (waveFormNumber === 5) {
+      waveFormNumber = 4;
     }
-
-    this.selectedWaveForm = this.waveForm[Math.floor(a)];
+    this.selectedWaveForm = this.waveForm[Math.floor(waveFormNumber)];
   }
 
+  public SelectFrequency(k) {
+    this.frequency = k.value;
+  }
+
+  private scale = [
+    "E3",
+    "G3",
+    "A3",
+    "B3",
+    "D4",
+    "E4",
+    "G4",
+    "A4",
+    "B4",
+    "D5",
+    "E5",
+    "G5",
+    "A5",
+    "B5",
+    "D6",
+    "E6",
+  ];
+  public frequency = 0;
+  public Callback(ev: { t: number, g: number, n: number }) {
+    let wad = new Wad({
+      source: this.selectedWaveForm, env: { decay: 0.25, sustain: 0, release: 0.5 },
+      filter: [
+        { type: 'lowpass', frequency: this.frequency, q: 5 }
+      ]
+    });
+    wad.play({ pitch: this.scale[ev.n], label: 'A4' });
+  }
 
 }
 type waveForm = 'sine' | 'square' | 'sawtooth' | 'triangle' | 'noise';
